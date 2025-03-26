@@ -336,7 +336,7 @@ void Renderer::start() {
         if (fadeInVideo)
             fadeArgs = fmt::format(",fade=t=in:st=0:d={}", fadeInTime);
 
-        if (usingApi) {
+        if (usingApi && ffmpeg.isValid()) {
             auto res = ffmpeg.init(settings);
             if (res.isErr()) {
                 Loader::get()->queueInMainThread([] {
@@ -376,7 +376,7 @@ void Renderer::start() {
                 const std::vector<uint8_t> frame = currentFrame;
                 frameHasData = false;
                 lock.unlock();
-                if (usingApi) {
+                if (usingApi && ffmpeg.isValid()) {
                     auto res = ffmpeg.writeFrame(frame);
                     if (res.isErr()) {
                         Loader::get()->queueInMainThread([] {
@@ -396,7 +396,7 @@ void Renderer::start() {
             else lock.unlock();
         }
 
-        if (usingApi) {
+        if (usingApi && ffmpeg.isValid()) {
             ffmpeg.stop();
         }
         else {
