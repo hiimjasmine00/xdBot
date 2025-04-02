@@ -426,8 +426,7 @@ void Renderer::start() {
 
         if (usingApi) {
             std::string file = audioMode == AudioMode::Song ? songFile : "fmodoutput.wav";
-            ffmpeg::AudioMixer mixer;
-            mixer.mixVideoAudio(path, file, tempPath);
+            ffmpeg::AudioMixer::mixVideoAudio(path, file, tempPath);
         }
         else {
             #ifdef GEODE_IS_WINDOWS
@@ -529,7 +528,7 @@ void Renderer::stop(int frame) {
     recording = false;
     timeAfter = 0.f;
 
-    #ifdef GEODE_IS_ANDROID
+    #ifndef GEODE_IS_WINDOWS
     audioMode = AudioMode::Off;
     #else
     if (usingApi) audioMode = AudioMode::Off;
@@ -569,8 +568,8 @@ void Renderer::changeRes(bool og) {
     float scaleY = 1.f;
 
     res = og ? ogRes : CCSize(320.f * (width / static_cast<float>(height)), 320.f);
-    scaleX = og ? ogScaleX : (width / res.width);
-    scaleY = og ? ogScaleY : (height / res.height);
+    scaleX = og ? ogScaleX : (width / (res.width * getDisplayFactor()));
+    scaleY = og ? ogScaleY : (height / (res.height * getDisplayFactor()));
 
     if (res == CCSize(0, 0) && !og) return changeRes(true);
        
@@ -629,10 +628,8 @@ void MyRenderTexture::begin() {
 
         glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, old_rbo);
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, old_fbo);
-    }
-#else
-    }
 #endif
+    }
 }
 
 void MyRenderTexture::capture(std::mutex& lock, std::vector<uint8_t>& data, volatile bool& hasData) {
@@ -672,10 +669,8 @@ void MyRenderTexture::capture(std::mutex& lock, std::vector<uint8_t>& data, vola
 
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, old_fbo);
         director->setViewport();
-    }
-#else
-    }
 #endif
+    }
 }
 
 void Renderer::captureFrame() {

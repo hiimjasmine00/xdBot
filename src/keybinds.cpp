@@ -55,7 +55,7 @@ class $modify(CCKeyboardDispatcher) {
   }
 };
 
-#ifdef GEODE_IS_ANDROID
+#ifndef GEODE_IS_WINDOWS
 
 namespace keybinds {
 

@@ -1,7 +1,6 @@
 #include "practice_fixes.hpp"
 
 #include <Geode/modify/GJBaseGameLayer.hpp>
-#include <Geode/modify/CheckpointObject.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 
 class $modify(GJBaseGameLayer) {
@@ -25,24 +24,16 @@ class $modify(GJBaseGameLayer) {
 
 };
 
-class $modify(CheckpointObject) {
-  #ifdef GEODE_IS_WINDOWS
-  bool init() {
-    bool ret = CheckpointObject::init();
-    CheckpointObject* cp = this;
-  #else
-  static CheckpointObject* create() {
-    CheckpointObject* ret = CheckpointObject::create();
-    CheckpointObject* cp = ret;
-  #endif
+class $modify(PlayLayer) {
+  CheckpointObject* createCheckpoint() {
+    CheckpointObject* cp = PlayLayer::createCheckpoint();
 
-    if (!cp) return ret;
+    if (!cp) return cp;
 
     auto& g = Global::get();
-    PlayLayer* pl = PlayLayer::get();
 
-    PlayerData p1Data = PlayerPracticeFixes::saveData(pl->m_player1);
-    PlayerData p2Data = PlayerPracticeFixes::saveData(pl->m_player2);
+    PlayerData p1Data = PlayerPracticeFixes::saveData(m_player1);
+    PlayerData p2Data = PlayerPracticeFixes::saveData(m_player2);
 
     Global::get().checkpoints[cp] = {
       Global::getCurrentFrame(),
@@ -56,12 +47,9 @@ class $modify(CheckpointObject) {
       Global::get().previousFrame
     };
 
-    return ret;
+    return cp;
 
   }
-};
-
-class $modify(PlayLayer) {
 
   void storeCheckpoint(CheckpointObject * cp) {
     if (!cp) return PlayLayer::storeCheckpoint(cp);
@@ -83,8 +71,8 @@ class $modify(PlayLayer) {
 
     auto& g = Global::get();
 
-  if (g.mod->getSavedValue<bool>("autosave_checkpoint_enabled"))
-    Macro::tryAutosave(m_level, cp);
+    if (g.mod->getSavedValue<bool>("autosave_checkpoint_enabled"))
+      Macro::tryAutosave(m_level, cp);
 
     if (g.state == state::playing) {
       PlayLayer::loadFromCheckpoint(cp);
@@ -135,8 +123,8 @@ class $modify(PlayLayer) {
     PlayerPracticeFixes::applyData(this->m_player2, p2Data, true);
 
     if (g.state != state::recording && g.mod->getSavedValue<bool>("macro_always_practice_fixes")) {
-      this->m_player1->releaseButton(static_cast<PlayerButton>(1));
-      this->m_player2->releaseButton(static_cast<PlayerButton>(1));
+      this->m_player1->releaseButton(PlayerButton::Jump);
+      this->m_player2->releaseButton(PlayerButton::Jump);
     }
 
   }

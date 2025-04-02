@@ -97,9 +97,9 @@ void ShowTrajectory::createTrajectory(PlayLayer* pl, PlayerObject* fakePlayer, P
         }
 
         if (i == 0) {
-            hold ? fakePlayer->pushButton(static_cast<PlayerButton>(1)) : fakePlayer->releaseButton(static_cast<PlayerButton>(1));
+            hold ? fakePlayer->pushButton(PlayerButton::Jump) : fakePlayer->releaseButton(PlayerButton::Jump);
             if (pl->m_levelSettings->m_platformerMode)
-                (inverted ? !realPlayer->m_isGoingLeft : realPlayer->m_isGoingLeft) ? fakePlayer->pushButton(static_cast<PlayerButton>(2)) : fakePlayer->pushButton(static_cast<PlayerButton>(3));
+                (inverted ? !realPlayer->m_isGoingLeft : realPlayer->m_isGoingLeft) ? fakePlayer->pushButton(PlayerButton::Left) : fakePlayer->pushButton(PlayerButton::Right);
         }
 
         fakePlayer->update(t.delta);

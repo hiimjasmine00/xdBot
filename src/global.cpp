@@ -357,7 +357,7 @@ $execute{
     g.mod->setSettingValue<std::filesystem::path>("autosaves_folder", g.mod->getSaveDir() / "autosaves");
   }
 
-  #ifdef GEODE_IS_ANDROID
+  #ifndef GEODE_IS_WINDOWS
   
   if (!g.mod->setSavedValue("defaults_set_15", true))
     g.mod->setSavedValue("render_video_args", std::string(""));

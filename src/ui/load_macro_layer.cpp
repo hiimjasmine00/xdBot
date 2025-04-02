@@ -69,8 +69,7 @@ void LoadMacroLayer::reloadList(int amount) {
 
 	ListView* listView = listLayer->getChildByType<ListView>(0);
 
-	CCLayer* contentLayer = nullptr;
-	contentLayer = typeinfo_cast<CCLayer*>(listView->m_tableView->getChildren()->objectAtIndex(0));
+	CCLayer* contentLayer = listView->m_tableView->m_contentLayer;
 
 	int childrenCount = 0;
 	float posY = 0.f;
@@ -451,7 +450,7 @@ void LoadMacroLayer::addList(bool refresh, float prevScroll) {
 	}
 
 	ListView* listView = ListView::create(cells, 35, 323, 180);
-	CCNode* contentLayer = static_cast<CCNode*>(listView->m_tableView->getChildren()->objectAtIndex(0));
+	CCNode* contentLayer = listView->m_tableView->m_contentLayer;
 
 	if (refresh)
 		contentLayer->setPositionY(prevScroll);

@@ -267,26 +267,22 @@ class $modify(EffectGameObject) {
 
 class $modify(GameLevelOptionsLayer) {
 
-    static GameLevelOptionsLayer* create(GJGameLevel* level) {
-        GameLevelOptionsLayer* ret = GameLevelOptionsLayer::create(level);
+    void setupOptions() {
+        GameLevelOptionsLayer::setupOptions();
 
-        if (!Mod::get()->getSettingValue<bool>("level_settings_button")) return ret;
+        if (!Mod::get()->getSettingValue<bool>("level_settings_button")) return;
 
         CCSprite* sprite = CCSprite::createWithSpriteFrameName("GJ_playBtn2_001.png");
 		sprite->setScale(0.350f);
             
         CCMenuItemSpriteExtra* btn = CCMenuItemSpriteExtra::create(
             sprite,
-		    ret,
+		    this,
 		    menu_selector(RecordLayer::openMenu2)
         );
 		btn->setPosition({-174, -114});
 
-        if (CCLayer* layer = ret->getChildByType<CCLayer>(0))
-            if (CCMenu* menu = layer->getChildByType<CCMenu>(1))
-                menu->addChild(btn);
-
-        return ret;
+        m_buttonMenu->addChild(btn);
     }
     
 };
