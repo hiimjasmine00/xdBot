@@ -5,7 +5,7 @@
 		"android": "2.2074",
 		"mac": "2.2074"
 	},
-	"version": "2.3.11",
+	"version": "2.4.0",
 	"id": "zilko.xdbot",
 	"name": "xdBot",
 	"developer": "Zilko",
@@ -13,13 +13,9 @@
 	"dependencies": {
 		"geode.custom-keybinds": {
 			"importance": "required",
-			"version": ">=v1.10.0",
-			"platforms": [
-    			"win"
-   			]
-  		},
-  		"eclipse.ffmpeg-api": ">=1.1.2"
- 	},
+			"platforms": ["win"]
+		}
+	},
 	"settings": {
 		"button-setting": {
 			"type": "custom:button",
