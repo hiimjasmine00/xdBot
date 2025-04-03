@@ -12,6 +12,7 @@
 	"description": "Best Free Bot fr",
 	"dependencies": {
 		"geode.custom-keybinds": {
+			"version": ">=v1.10.0",
 			"importance": "required",
 			"platforms": ["win"]
 		}
