@@ -3,7 +3,7 @@
 
 #include <Geode/modify/CCTextInputNode.hpp>
 
-#ifdef GEODE_IS_WINDOWS
+#ifdef GEODE_IS_DESKTOP
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 #endif
 
@@ -56,7 +56,7 @@ bool Global::hasIncompatibleMods() {
     }
   }
 
-  #ifdef GEODE_IS_WINDOWS
+  #if defined(GEODE_IS_WINDOWS) || defined(GEODE_IS_ANDROID)
 
   if (Mod* mod = Loader::get()->getLoadedMod("tobyadd.gdh")) {
     std::filesystem::path configPath = mod->getSaveDir() / "config.json";
@@ -67,29 +67,17 @@ bool Global::hasIncompatibleMods() {
       if (jsonFile.is_open()) {
         json jsonData;
         jsonFile >> jsonData;
+        #ifdef GEODE_IS_WINDOWS
         if (jsonData.contains("tps_enabled")) {
           if (jsonData["tps_enabled"])
             settingsToDisable.push_back("<cr>TPS Bypass (GDH)</c>");
         }
-      }
-    }
-  }
-
-  #else
-
-  if (Mod* mod = Loader::get()->getLoadedMod("tobyadd.gdh_mobile")) {
-    std::filesystem::path configPath = mod->getSaveDir() / "config.json";
-	  using namespace nlohmann;
-    
-    if (std::filesystem::exists(configPath)) {
-      std::ifstream jsonFile(configPath);
-      if (jsonFile.is_open()) {
-        json jsonData;
-        jsonFile >> jsonData;
+        #else
         if (jsonData.contains("fps_value")) {
           if (jsonData["fps_value"] != 240)
             settingsToDisable.push_back("<cr>TPS Bypass (GDH)</c>");
         }
+        #endif
       }
     }
   }
@@ -186,7 +174,7 @@ int Global::getCurrentFrame(bool editor) {
 }
 
 void Global::updateKeybinds() {
-#ifdef GEODE_IS_WINDOWS
+#ifdef GEODE_IS_DESKTOP
 
   auto& g = Global::get();
   for (size_t i = 0; i < 6; i++) {
@@ -435,7 +423,7 @@ $execute{
     g.mod->setSavedValue("menu_pause_on_open", false);
     g.mod->setSavedValue("menu_show_cursor", true);
 
-    #ifdef GEODE_IS_ANDROID
+    #ifdef GEODE_IS_MOBILE
     g.mod->setSavedValue("menu_show_cursor", false);
     #endif
 

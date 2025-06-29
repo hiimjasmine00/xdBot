@@ -11,7 +11,7 @@
 #include <Geode/modify/CCKeyboardDispatcher.hpp>
 #include <Geode/modify/CCTouchDispatcher.hpp>
 
-#ifdef GEODE_IS_WINDOWS
+#ifdef GEODE_IS_DESKTOP
 
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 #include <regex>
@@ -55,7 +55,7 @@ class $modify(CCKeyboardDispatcher) {
   }
 };
 
-#ifndef GEODE_IS_WINDOWS
+#ifdef GEODE_IS_MOBILE
 
 namespace keybinds {
 
@@ -68,7 +68,7 @@ namespace keybinds {
 using namespace keybinds;
 
 void onKeybind(bool down, ActionID id) {
-#ifdef GEODE_IS_WINDOWS
+#ifdef GEODE_IS_DESKTOP
 
   auto& g = Global::get();
 
@@ -142,7 +142,7 @@ void onKeybind(bool down, ActionID id) {
 
 $execute{
 
-  #ifdef GEODE_IS_WINDOWS
+  #ifdef GEODE_IS_DESKTOP
 
     BindManager * bm = BindManager::get();
 
